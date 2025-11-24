@@ -1,0 +1,15 @@
+We need to coin flip head or tails game that integrates with twitch chat.
+
+There needs to be audio and a visual component to it.
+
+This should be 3d and use a front and back graphic for the coin.
+
+This needs a command that two people can !username to challenge each other.
+
+This should be able to be triggered from twitch chat.
+
+When the command is triggered, there should be a count down, then the coin flip animation should play with sound effects.
+
+This should show the user who won the coin flip in chat as well as on screen.
+
+BOT Name - TT FLIPPER
