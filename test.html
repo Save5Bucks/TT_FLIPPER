@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TT FLIPPER - Test</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #ffd700;
+            font-size: 48px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TT FLIPPER</h1>
+        <p>If you see this, the server is working!</p>
+        <p>THREE.js loaded: <span id="three-status">Checking...</span></p>
+        <p>TMI.js loaded: <span id="tmi-status">Checking...</span></p>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tmi.js@1.8.5/dist/tmi.min.js"></script>
+    <script>
+        document.getElementById('three-status').textContent = typeof THREE !== 'undefined' ? '✅ Yes' : '❌ No';
+        
+        setTimeout(() => {
+            document.getElementById('tmi-status').textContent = typeof tmi !== 'undefined' ? '✅ Yes' : '❌ No';
+        }, 1000);
+    </script>
+</body>
+</html>

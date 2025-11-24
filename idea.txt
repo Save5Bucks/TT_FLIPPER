@@ -2,7 +2,7 @@ We need to coin flip head or tails game that integrates with twitch chat.
 
 There needs to be audio and a visual component to it.
 
-This should be 3d and use a front and back graphic for the coin.
+This should be 3d and use a front W and the back L for the gold coin. This should look embossed and shiny.
 
 This needs a command that two people can !username to challenge each other.
 

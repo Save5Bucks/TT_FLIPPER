@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coin Flip Odds Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 5px;
+        }
+        .heads { color: #4caf50; }
+        .tails { color: #ff5722; }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #ff1744;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Coin Flip Odds Test</h1>
+    <button onclick="runTest(100)">Run 100 Flips</button>
+    <button onclick="runTest(1000)">Run 1000 Flips</button>
+    <button onclick="runTest(10000)">Run 10000 Flips</button>
+    <div id="output"></div>
+
+    <script>
+        function simulateFlip(result) {
+            // This is the EXACT logic from coin.js
+            const isWin = result === 'W';
+            
+            // Random number of flips between 4-8
+            const numFlips = Math.floor(Math.random() * 5) + 4;
+            
+            // Even rotations = return to heads (starting position)
+            // Odd rotations = show tails (180 degrees from start)
+            let finalHalfRotations = numFlips * 2; // Convert to half rotations
+            
+            if (isWin) {
+                // Want heads - make sure even number of half-rotations
+                if (finalHalfRotations % 2 !== 0) finalHalfRotations += 1;
+            } else {
+                // Want tails - make sure odd number of half-rotations
+                if (finalHalfRotations % 2 === 0) finalHalfRotations += 1;
+            }
+            
+            // Starting position: rotation.x = PI/2 (heads facing camera)
+            const baseRotation = Math.PI / 2;
+            const targetRotation = baseRotation + (Math.PI * finalHalfRotations);
+            
+            // Calculate final position
+            // Normalize rotation to 0-2PI range to determine final face
+            const normalizedRotation = (targetRotation % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+            
+            // At PI/2 (90 degrees) = heads
+            // At PI/2 + PI (270 degrees) = tails
+            // Check which is closer
+            const headRotation = Math.PI / 2;
+            const tailRotation = Math.PI / 2 + Math.PI;
+            
+            const distToHead = Math.min(
+                Math.abs(normalizedRotation - headRotation),
+                Math.abs(normalizedRotation - (headRotation + Math.PI * 2))
+            );
+            const distToTail = Math.min(
+                Math.abs(normalizedRotation - tailRotation),
+                Math.abs(normalizedRotation - (tailRotation - Math.PI * 2))
+            );
+            
+            return distToHead < distToTail ? 'HEADS' : 'TAILS';
+        }
+
+        function runTest(numFlips) {
+            const output = document.getElementById('output');
+            output.innerHTML = '<div class="result">Testing...</div>';
+            
+            setTimeout(() => {
+                let headsCount = 0;
+                let tailsCount = 0;
+                const details = [];
+                
+                for (let i = 0; i < numFlips; i++) {
+                    // Randomly pick W or L (50/50)
+                    const input = Math.random() < 0.5 ? 'W' : 'L';
+                    const result = simulateFlip(input);
+                    
+                    if (result === 'HEADS') {
+                        headsCount++;
+                    } else {
+                        tailsCount++;
+                    }
+                    
+                    // Log first 20 for verification
+                    if (i < 20) {
+                        details.push(`Flip ${i + 1}: Input=${input}, Output=${result}`);
+                    }
+                }
+                
+                const headsPercent = ((headsCount / numFlips) * 100).toFixed(2);
+                const tailsPercent = ((tailsCount / numFlips) * 100).toFixed(2);
+                
+                let html = `
+                    <div class="result">
+                        <h2>Results for ${numFlips} flips:</h2>
+                        <p class="heads">HEADS: ${headsCount} (${headsPercent}%)</p>
+                        <p class="tails">TAILS: ${tailsCount} (${tailsPercent}%)</p>
+                        <p><strong>Difference from 50/50:</strong> ${Math.abs(50 - headsPercent).toFixed(2)}%</p>
+                    </div>
+                `;
+                
+                if (details.length > 0) {
+                    html += `
+                        <div class="result">
+                            <h3>First 20 flips details:</h3>
+                            <pre>${details.join('\n')}</pre>
+                        </div>
+                    `;
+                }
+                
+                output.innerHTML = html;
+            }, 100);
+        }
+
+        // Auto-run 100 flips on load
+        window.addEventListener('load', () => runTest(100));
+    </script>
+</body>
+</html>
